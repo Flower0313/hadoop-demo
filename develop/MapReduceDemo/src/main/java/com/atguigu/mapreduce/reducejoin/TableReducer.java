@@ -31,8 +31,9 @@ public class TableReducer extends Reducer<Text, TableBean, TableBean, NullWritab
         for (TableBean value : values) {
             if ("order".equals(value.getFlag())) {
                 TableBean tempOrderBean = new TableBean();
-                //这样添加的目的是，若直接add(value)，因为hadoop组件中的迭代器每次迭代的内容不同，但是会用同一个地址，小顶堆
-                //所以直接add是一样的地址，所以后面的内容会覆盖之前的内容。
+                //这样添加的目的是，若直接add(value)，因为hadoop组件中的迭代器每次迭代的内容不同,
+                //但是会用同一个地址,小顶堆,所以直接add是一样的地址，所以后面的内容会覆盖之前的内容。
+                //将BeanUtils.copyProperties(A,B),将A的字段值赋值给B(公共字段),没有则不赋值
                 try {
                     BeanUtils.copyProperties(tempOrderBean, value);
                 } catch (Exception e) {

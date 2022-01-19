@@ -18,6 +18,7 @@ import org.apache.hadoop.hive.serde2.objectinspector.primitive.PrimitiveObjectIn
  */
 public class MyUDF extends GenericUDF {
     /**
+     * 全局执行一次
      * 1.判断参数的个数
      * 2.判断参数的类型
      * 3.约定返回值类型
@@ -31,15 +32,16 @@ public class MyUDF extends GenericUDF {
         if (arguments.length != 1) {
             throw new UDFArgumentLengthException("===请只输入一个参数！===");
         }
-        if (!arguments[0].getCategory().equals(ObjectInspector.Category.PRIMITIVE)) {
-            throw new UDFArgumentTypeException(1, "===只能是primitive类型===");
+        if (!ObjectInspector.Category.PRIMITIVE.equals(arguments[0].getCategory())) {
+            throw new UDFArgumentTypeException(1, "===只能是primitive类型(基类型)===");
         }
-        //调用工厂来创建类
+        //调用工厂来创建类,我们调用函数返回值类型就是Int类型
         return PrimitiveObjectInspectorFactory.javaIntObjectInspector;
     }
 
     /**
-     * 解决具体逻辑的
+     * 解决具体逻辑的，进来一行数据执行一次
+     *
      * @param arguments
      * @return
      * @throws HiveException
@@ -47,15 +49,13 @@ public class MyUDF extends GenericUDF {
     @Override
     public Object evaluate(DeferredObject[] arguments) throws HiveException {
         Object o = arguments[0].get();
-        if(o==null){
-            return 0;
-        }
-        return o.toString().length();
+        return o == null ? 0 : o.toString().length();
     }
 
     /**
-     * 用于获取解释的字符串
+     * 用于获取解释的字符串,使用explain时会打印出来
      * 如果当前函数需要跑mr，会打印一个字符串，内容就是return内容。
+     *
      * @param children
      * @return
      */

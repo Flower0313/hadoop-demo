@@ -33,7 +33,7 @@ public class TypeInterceptor implements Interceptor {
         Map<String,String> headers = event.getHeaders();
         //2.获取事件中的body信息，getBody()封装了将字节数组转换成了string
         String body = new String(event.getBody());
-
+        //type是自定义的名称
         //3.根据body中的是否有"atguigu"来决定添加怎么样的头信息
         if(body.contains("atguigu")){
             //4.分别添加头信息

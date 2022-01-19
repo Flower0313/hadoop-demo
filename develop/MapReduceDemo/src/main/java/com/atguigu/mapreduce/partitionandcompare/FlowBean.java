@@ -93,9 +93,11 @@ public class FlowBean implements WritableComparable<FlowBean> {
     /**
      * 这里的compareTo会在环形缓冲区中进行快速排序
      * 也就是QuickSort中的sortInternal()中调用了此比较方法
+     * QuickSort的第74行 => MapTask的第1283行 => WritableComparator的第177行 => 自定义排序方法的compareTo
+     * 快速排序的时机就是当缓冲区快要溢写出去的时候
      *
      * @param o 比较对象
-     * @return
+     * @return 比较结果
      */
     @Override
     public int compareTo(FlowBean o) {

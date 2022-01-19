@@ -36,7 +36,11 @@ public class FlowDriver {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FlowBean.class);
         job.setPartitionerClass(ProvincePartitioner.class);
-        job.setNumReduceTasks(5);
+        /*
+        * 自定义Partition后，要根据自定义Partitioner的逻辑设置相应数量的ReduceTask，
+        * 因为你不设置他会走自己默认的分区方法，也就是只有1个分区的方法，全部写入0号分区。
+        * */
+        job.setNumReduceTasks(1);
 
         // 6 设置输入和输出路径
         //注意这个输出路径下的文件必须不能存在

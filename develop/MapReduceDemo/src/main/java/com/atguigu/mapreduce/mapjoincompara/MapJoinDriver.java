@@ -5,6 +5,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.NullWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
@@ -25,19 +26,20 @@ public class MapJoinDriver {
         job.setJarByClass(MapJoinDriver.class);
         // 3 关联mapper
         job.setMapperClass(MapJoinMapper.class);
-        job.setReducerClass(TableReduce.class);
 
         // 4 设置Map输出KV类型
-        job.setMapOutputKeyClass(IntWritable.class);
-        job.setMapOutputValueClass(TableBean2.class);
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(NullWritable.class);
 
         // 5 设置最终输出KV类型
-        job.setOutputKeyClass(TableBean2.class);
+        job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(NullWritable.class);
 
-        // 加载缓存数据,加载小的文件，加载到了DistributedCache
+        // 加载缓存数据,加载小的文件，加载到了DistributedCache,缓存pd表
         job.addCacheFile(new URI("file:///T:/ShangGuiGu/hadoop/input/inputtable/pd.txt"));
-        // 6 设置输入输出路径
+        //设置不走reduce
+        job.setNumReduceTasks(0);
+        // 6 设置输入输出路径,读取order表
         FileInputFormat.setInputPaths(job, new Path("T:\\ShangGuiGu\\hadoop\\input\\inputtable2\\order.txt"));
         FileOutputFormat.setOutputPath(job, new Path(FileUtils.getProFileName("MapJoinDriver")));
         // 7 提交

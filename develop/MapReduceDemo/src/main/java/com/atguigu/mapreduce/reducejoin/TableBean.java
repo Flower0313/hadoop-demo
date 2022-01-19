@@ -13,9 +13,8 @@ import java.io.IOException;
  * @Theme
  */
 public class TableBean implements Writable {
-    /**
-     * 合并两个表的字段，然后新增一个标识字段来判断哪个字段是他们属于哪张表
-     */
+
+    //合并两个表的字段，然后新增一个标识字段来判断哪个字段是他们属于哪张表
     private String id; //订单id
     private String pid; //产品id
     private int amount; //产品数量

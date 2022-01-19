@@ -39,9 +39,9 @@ public class CombineTextInputDemo {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
-        //设置文件切片为4m，设置切片就不会按文件来单独切片了
-        //job.setInputFormatClass(CombineTextInputFormat.class);
-        //CombineTextInputFormat.setMaxInputSplitSize(job, 33554432);
+        //设置文件切片为4m，设置切片就不会按文件来单独切片了,会先单独切片然后再聚合
+        job.setInputFormatClass(CombineTextInputFormat.class);
+        CombineTextInputFormat.setMaxInputSplitSize(job, 2097152);
 
         // 6 设置输入和输出路径
         //注意这个输出路径下的文件必须不能存在

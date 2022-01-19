@@ -15,8 +15,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
  * @ClassName MapReduceDemo-WordCountDriver
  * @Author Holden_—__——___———____————_____Xiao
  * @Create 2021年9月05日23:58 - 周日
- * @Theme
- * com.atguigu.mapreduce.wordcount.WordCountDriverV1
+ * @Theme com.atguigu.mapreduce.wordcount.WordCountDriverV1
  */
 public class WordCountDriverV1 {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
@@ -47,6 +46,18 @@ public class WordCountDriverV1 {
         FileInputFormat.setInputPaths(job, new Path("T:\\ShangGuiGu\\hadoop\\input\\inputword"));
 
         FileOutputFormat.setOutputPath(job, new Path(FileUtils.getProFileName("WordCountDriverV1")));
+
+        /*if (job.waitForCompletion(true)) {//如果第一轮MapReduce完成再做这里的代码
+            Job job2 = Job.getInstance();
+            //设置第二轮MapReduce的相应处理类与输入输出
+            FileInputFormat.setInputPaths(job, new Path("T:\\ShangGuiGu\\hadoop\\input\\inputword"));
+
+            FileOutputFormat.setOutputPath(job2, new Path(FileUtils.getProFileName("WordCountDriverV1")));
+
+
+            System.exit(job2.waitForCompletion(true) ? 0 : 1);
+            System.out.println("hello");
+        }*/
 
         // 7 提交job,此方法蕴含job.submit()方法,参数为true的意思的开启监视并打印错误日志
         boolean result = job.waitForCompletion(true);

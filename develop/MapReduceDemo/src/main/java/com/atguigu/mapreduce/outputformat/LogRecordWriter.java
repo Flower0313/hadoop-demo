@@ -22,7 +22,7 @@ import java.io.IOException;
     //ReduceContextImpl调用父类TaskInputOutputContextImpl的构造方法会把我们这个类给初始化，接着会调这个类中的write()重写方法
     //最终是在ReduceTask的内部类NewTrackingRecordWriter的构造方法中的real成员变量赋值，
     //因为LogOutputFormat继承了FileOutputFormat并实现了getRecordWriter()，然后real变量收到的其实是LogRecordWriter实现类
-    //这样就通了，
+    //这样就通了
 public class LogRecordWriter extends RecordWriter<Text, NullWritable> {
     private FSDataOutputStream atguiguOut;
     private FSDataOutputStream otherOut;

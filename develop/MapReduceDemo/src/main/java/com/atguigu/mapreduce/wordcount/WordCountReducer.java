@@ -36,8 +36,12 @@ public class WordCountReducer extends Reducer<Text, IntWritable, Text, IntWritab
     private IntWritable v = new IntWritable();
 
     @Override
-    protected void reduce(Text key, Iterable<IntWritable> values, Reducer<Text, IntWritable, Text, IntWritable>.Context context) throws IOException, InterruptedException {
+    protected void setup(Reducer<Text, IntWritable, Text, IntWritable>.Context context) throws IOException, InterruptedException {
         System.out.println("我是reduce");
+    }
+
+    @Override
+    protected void reduce(Text key, Iterable<IntWritable> values, Reducer<Text, IntWritable, Text, IntWritable>.Context context) throws IOException, InterruptedException {
         // 1 累加求和
         sum = 0;
         //<hello,Iterable[1,1,1]>

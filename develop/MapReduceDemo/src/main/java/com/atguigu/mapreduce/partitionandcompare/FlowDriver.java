@@ -36,8 +36,8 @@ public class FlowDriver {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(FlowBean.class);
 
-        //job.setPartitionerClass(ProvincePartitioner.class);
-        //job.setNumReduceTasks(5);
+        job.setPartitionerClass(ProvincePartitioner.class);
+        job.setNumReduceTasks(5);
         // 6 设置输入和输出路径
 
         FileInputFormat.setInputPaths(job, new Path("T:\\ShangGuiGu\\hadoop\\input\\phone"));

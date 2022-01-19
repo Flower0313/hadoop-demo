@@ -32,7 +32,7 @@ public class TimeStampInterceptor implements Interceptor {
         JSONObject jsonObject = JSONObject.parseObject(log);
         //获得json中key为ts的value值（时间戳）
         String ts = jsonObject.getString("ts");
-        //给timestamp添加字段创建的时间而不是当前的时间，因为会发生零点漂移
+        //给timestamp添加字段创建的时间而不是当前的时间，因为会发生零点漂移,会自动识别头信息中的timestamp
         event.getHeaders().put("timestamp", ts);
 
         return event;

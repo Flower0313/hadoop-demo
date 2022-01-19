@@ -5,6 +5,7 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
@@ -20,7 +21,7 @@ public class Producer1 {
         Properties properties = new Properties();
 
         // 2. 给kafka配置对象添加配置信息
-        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,"hadoop102:9092");
+        properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "hadoop102:9092");
 
         // 设置ack
         properties.put(ProducerConfig.ACKS_CONFIG, "all");
@@ -34,14 +35,20 @@ public class Producer1 {
         properties.put(ProducerConfig.LINGER_MS_CONFIG, 1);
 
         //使用自定义的分区器
-        /*properties.put(ProducerConfig.PARTITIONER_CLASS_CONFIG,
-                "com.atguigu.kafka.MyPartition");*/
+        properties.put(ProducerConfig.PARTITIONER_CLASS_CONFIG,
+                "com.atguigu.kafka.MyPartition");
 
         // RecordAccumulator本地缓冲区大小，默认32M，
         properties.put(ProducerConfig.BUFFER_MEMORY_CONFIG, 33554432);
         // key,value序列化
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
         properties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+
+        //添加自定义的拦截器
+        ArrayList<Object> interceptors = new ArrayList<>();
+        interceptors.add("com.atguigu.kafka.interceptor.TimeInterceptor");
+        interceptors.add("com.atguigu.kafka.interceptor.CounterInterceptor");
+        properties.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG, interceptors);
 
         // 3. 创建kafka生产者对象
         Producer<String, String> kafkaProducer = new KafkaProducer<String, String>(properties);
@@ -52,7 +59,7 @@ public class Producer1 {
         //当然也可以指定分区号存放
         for (int i = 0; i < 5; i++) {
             //异步方法
-            kafkaProducer.send(new ProducerRecord<>("first1","kafka" + i));
+            kafkaProducer.send(new ProducerRecord<>("first1", "kafka" + i));
             //同步方法，如果没有收到ack会发生阻塞
             //kafkaProducer.send(new ProducerRecord<>("holden","kafka" + i)).get();
 

@@ -3,6 +3,7 @@ package com.atguigu.kafka.producer;
 import org.apache.kafka.clients.producer.*;
 
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @ClassName MapReduceDemo-CustomProducerCallback
@@ -36,20 +37,22 @@ public class ProducerCallback {
         // 3. 创建kafka生产者对象
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<String, String>(properties);
         // 4. 调用send方法,发送消息
+
         for (int i = 0; i < 50; i++) {
             // 添加回调
             // 该方法在Producer收到ack时调用，为异步调用
+
             kafkaProducer.send(new ProducerRecord<>("first1", "second" + i),
                     (metadata, exception) -> {
-                if (exception == null) {
-                    // 没有异常,输出信息到控制台，这个和send是异步的，如果不在主线程加sleep是看不到这条消息的，因为send发完就结束这个进程了
-                    System.out.println(metadata);
-                    //System.out.println("partition:"+metadata.partition() +"，offset:"+ metadata.offset());
-                } else {
-                    // 出现异常打印
-                    exception.printStackTrace();
-                }
-            });
+                        if (exception == null) {
+                            // 没有异常,输出信息到控制台，这个和send是异步的，如果不在主线程加sleep是看不到这条消息的，因为send发完就结束这个进程了
+                            System.out.println(metadata);
+                            //System.out.println("partition:"+metadata.partition() +"，offset:"+ metadata.offset());
+                        } else {
+                            // 出现异常打印
+                            exception.printStackTrace();
+                        }
+                    });
 
             //使每次发送消息后睡眠2ms，让消息不在同一批次中
             Thread.sleep(2);

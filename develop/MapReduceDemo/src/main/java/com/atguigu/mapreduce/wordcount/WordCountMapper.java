@@ -12,7 +12,7 @@ import java.io.IOException;
  * @Author Holden_—__——___———____————_____Xiao
  * @Create 2021年9月05日23:57 - 周日
  * @Theme KEYIN:表示map阶段输入Kv中k类型，起始偏移量是LongWritable
- * VALUEIN:表示map阶段输入Kv中的v类型,一行内容
+ * VALUEIN:表示map阶段输入Kv中的v类型,也就是一行行内容
  * 读数据是一行一行地去读，返回kv键值对
  * k：每一行的起始位置的偏移量 通常无意义
  * v：这一行的文本内容
@@ -30,18 +30,19 @@ public class WordCountMapper extends Mapper<LongWritable, Text, Text, IntWritabl
         System.out.println("我是setup");
     }
 
+    //执行知道读完文件为止,按行读取
     @Override
     protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, IntWritable>.Context context) throws IOException, InterruptedException {
 
         //1.获取一行
         //value是hello hello，key是偏移量
-        System.out.println("偏移量：" + key);
+        //System.out.println("偏移量：" + key);
         String line = value.toString();
 
         //2.切割字符串
         //hello
         //hello
-        //按空白切割
+        //Explain 按空白切割，包括空格和制表符
         String[] words = line.split("\\s+");
 
         //3.循环写出
